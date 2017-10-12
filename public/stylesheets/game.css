@@ -33,9 +33,21 @@
     width: 33%;
 }
 
-textarea {
-    width: 100%;
-    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-    box-sizing: border-box;         /* Opera/IE 8+ */
+.lowerright {
+    display:inline-block;
+}
+
+#story {
+    display:inline-block;
+    height:100%;
+    width:100%;
+}
+
+li.actions {
+    list-style: none;
+}
+
+li.actions:hover {
+    cursor: pointer;
+    color: blue;
 }

@@ -174,6 +174,22 @@ jQuery(function($){
         });
     });
 
+    $('#actionslist').on('click','li.actions',function() {
+        $.ajax({
+            type: "POST",
+            url: "/selectaction",
+            data: {
+                id: $(this).attr('id')
+            },
+            success: function (result) {
+                // alert('ok');
+            },
+            error: function (result) {
+                // alert('error');
+            }
+        });
+    });
+
     var socket = io.connect('http://localhost:3700');
     socket.on('js_client', function (msg) {
         console.log(msg);
@@ -182,10 +198,16 @@ jQuery(function($){
         if (res[0]=='listaction')
         {
             var action = core_msg.split('@');
-            for (i = 0; i < action.length; i++) {
+            for (i = 0; i < action.length; i++)
+            {
                 var list = d3.select("#actionslist");
-                list.append('li').text(action[i]);
+                list.append('li').attr("class","actions").attr("id",action[i].charAt(0)).text(action[i]);
             }
+        }
+        else if (res[0]=='executed')
+        {
+            var txt = $("textarea#story");
+            txt.val( txt.val() + "\n" + core_msg);
         }
     });
 

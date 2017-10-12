@@ -46,8 +46,9 @@ app.get('/', function (req, res)
     res.render('game', { content: '' });
 })
 
+var child;
 app.post('/start', function (req, res) {
-    var exec = require('child_process').exec, child;
+    var exec = require('child_process').exec;
     child = exec('java -jar ActuPlan.jar -h 0 -nbThreads 1 exemples/jail.apl exemples/jail-01.apl -jsmode',
         function (error, stdout, stderr){
             console.log('stdout: ' + stdout);
@@ -55,6 +56,13 @@ app.post('/start', function (req, res) {
                 console.log('exec error: ' + error);
             }
         });
+    res.end();
+})
+
+app.post('/selectaction', function (req, res) {
+    var id = req.body.id;
+    child.stdin.write(id+"\n");
+    //send_message_to_java("selection:"+id);
     res.end();
 })
 
@@ -128,6 +136,10 @@ net.createServer(function(sock) {
             send_message_to_java('start');
         }
         else if (string.startsWith('listaction@'))
+        {
+            io.sockets.emit('js_client', {data: string});
+        }
+        else if (string.startsWith('executed@'))
         {
             io.sockets.emit('js_client', {data: string});
         }
