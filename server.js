@@ -48,6 +48,11 @@ app.get('/', function (req, res)
 
 var child;
 app.post('/start', function (req, res) {
+    /*if (child != null)
+    {
+       child.kill();
+    }*/
+    //child = require('child_process').spawn('java', ['-jar ActuPlan.jar -h 0 -nbThreads 1 exemples/jail.apl exemples/jail-01.apl -jsmode'])
     var exec = require('child_process').exec;
     child = exec('java -jar ActuPlan.jar -h 0 -nbThreads 1 exemples/jail.apl exemples/jail-01.apl -jsmode',
         function (error, stdout, stderr){
@@ -140,6 +145,10 @@ net.createServer(function(sock) {
             io.sockets.emit('js_client', {data: string});
         }
         else if (string.startsWith('executed@'))
+        {
+            io.sockets.emit('js_client', {data: string});
+        }
+        else if (string.startsWith('end'))
         {
             io.sockets.emit('js_client', {data: string});
         }

@@ -35,6 +35,8 @@
 
 .lowerright {
     display:inline-block;
+    width: 66%;
+    height:100%;
 }
 
 #story {
@@ -44,6 +46,10 @@
 }
 
 li.actions {
+    list-style: none;
+}
+
+li.items {
     list-style: none;
 }
 

@@ -197,17 +197,25 @@ jQuery(function($){
         var core_msg = msg.data.toString().replace(res[0]+'@','').trim();
         if (res[0]=='listaction')
         {
+            var list = d3.select("#actionslist");
+            list.html('');
             var action = core_msg.split('@');
             for (i = 0; i < action.length; i++)
             {
-                var list = d3.select("#actionslist");
                 list.append('li').attr("class","actions").attr("id",action[i].charAt(0)).text(action[i]);
             }
+           // $("#actionslist").load(location.href + " #actionslist");
         }
         else if (res[0]=='executed')
         {
             var txt = $("textarea#story");
-            txt.val( txt.val() + "\n" + core_msg);
+            txt.val( txt.val() + core_msg + "\n");
+        }
+        else if (res[0]=='end')
+        {
+            var list = d3.select("#actionslist");
+            list.html('');
+            list.append('li').attr("class","items").text("End !");
         }
     });
 
