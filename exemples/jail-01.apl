@@ -11,9 +11,10 @@ Problem {
 
  InitialState{
     HasKeyG(g1);
-    //HasKeyG(g2);
-    Dazed(g1) = 60;
-    Dazed(g2) = 60;
+    Angry(g1) = 60;
+    NoiseAround(g1) = 30;
+    Distracted(g1) = 50;
+    Health(p1) = 50;
     CanReachG(p1,g1);
     CanReachG(p2,g2);
     CanReachP(p2,p1);
@@ -24,6 +25,7 @@ Problem {
 
  Goal{
    Open(d1);
+   // HasKeyP(p1);
    Open(d2);
  }
 

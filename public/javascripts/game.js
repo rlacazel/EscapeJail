@@ -211,7 +211,7 @@ jQuery(function($){
             var txt = $("textarea#story");
             txt.val( txt.val() + core_msg + "\n");
         }
-        else if (res[0]=='end')
+        else if (core_msg=='end')
         {
             var list = d3.select("#actionslist");
             list.html('');
