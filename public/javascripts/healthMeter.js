@@ -81,10 +81,14 @@ Phaser.Plugin.HealthMeter.prototype.bar = function(char) {
     this._setupOptions(options);
 };
 
-Phaser.Plugin.HealthMeter.prototype.moveBar = function() {
+Phaser.Plugin.HealthMeter.prototype.moveBar = function(x,y) {
     if (this.options.mode == 'bar') {
+        this.options.x = x;
+        this.options.y = y;
         this.healthBar.x = this.options.x;
         this.healthBar.y = this.options.y;
+        this.backBar.x = this.options.x;
+        this.backBar.y = this.options.y;
     }
 };
 
@@ -137,9 +141,9 @@ Phaser.Plugin.HealthMeter.prototype.updateBar = function() {
         bmd.ctx.fillStyle = this.options.background;
         bmd.ctx.fill();
 
-        var backBar = this.game.add.sprite(this.options.x, this.options.y, bmd);
-        backBar.alpha = this.options.alpha;
-        backBar.fixedToCamera = true;
+        this.backBar = this.game.add.sprite(this.options.x, this.options.y, bmd);
+        this.backBar.alpha = this.options.alpha;
+        //backBar.fixedToCamera = true;
 
         bmd = this.game.add.bitmapData(this.options.width, this.options.height);
         bmd.ctx.beginPath();
@@ -148,7 +152,7 @@ Phaser.Plugin.HealthMeter.prototype.updateBar = function() {
         bmd.ctx.fill();
         this.healthBar = this.game.add.sprite(this.options.x, this.options.y, bmd);
         this.healthBar.width = (this.char.health / this.char.maxHealth) * this.options.width;
-        this.healthBar.fixedToCamera = true;
+        //this.healthBar.fixedToCamera = true;
 
         return;
     }

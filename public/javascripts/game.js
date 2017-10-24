@@ -21,21 +21,23 @@ function Character(x, y, img_id, health) {
     this.health_bar = null;
     this.sprite = null;
     this.getHit = function(val) {
-        this.health_bar.char.health -= val;
-        this.health_bar.update();
+        var newVal = this.health_bar.char.health + val;
+        if (newVal >= 0 && newVal <= 100) {
+            this.health_bar.char.health = newVal;
+            this.health_bar.update();
+        }
     };
     this.move = function(x, y) {
         this.x = x*tilesize;
         this.y = y*tilesize;
         this.sprite.x = this.x;
         this.sprite.y = this.y;
-        this.health_bar.options.x = this.x;
-        this.health_bar.options.y = this.y;
-        this.health_bar.moveBar();
+        this.health_bar.moveBar((x+0.1)*tilesize, y*tilesize-3);
     };
 }
 
 var p1 = new Character(3, 3, 116, 100);
+var p2 = new Character(6, 3, 84, 100);
 
 function preload() {
     game.load.spritesheet('tileset', 'images/tileset.png', 64, 64);
@@ -57,6 +59,7 @@ function create() {
     drawTileRectangle(roomAx+1,roomAy+1,3,3,'tileset',215);
     drawTileRectangle(roomBx+1,roomBy+1,3,3,'tileset',215);
     addCharacter(p1);
+    addCharacter(p2);
 }
 
 function addCharacter(character)
@@ -202,6 +205,8 @@ function render() {
 jQuery(function($){
 
     $("#start").click(function(e) {
+        /*p1.move(10,10);
+        p1.getHit(-20);*/
         e.preventDefault();
         $.ajax({
             type: "POST",
@@ -217,7 +222,6 @@ jQuery(function($){
     });
 
     $('#actionslist').on('click','li.actions',function() {
-        p1.move(10,10);
         $.ajax({
             type: "POST",
             url: "/selectaction",
