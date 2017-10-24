@@ -13,9 +13,34 @@ var roomBy = 0;
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'canvascontainer', { preload: preload, create: create, update: update, render: render });
 var doorA;
 
+function Character(x, y, img_id, health) {
+    this.x = x;
+    this.y = y;
+    this.img_id = img_id;
+    this.health = health;
+    this.health_bar = null;
+    this.sprite = null;
+    this.getHit = function(val) {
+        this.health_bar.char.health -= val;
+        this.health_bar.update();
+    };
+    this.move = function(x, y) {
+        this.x = x*tilesize;
+        this.y = y*tilesize;
+        this.sprite.x = this.x;
+        this.sprite.y = this.y;
+        this.health_bar.options.x = this.x;
+        this.health_bar.options.y = this.y;
+        this.health_bar.moveBar();
+    };
+}
+
+var p1 = new Character(3, 3, 116, 100);
+
 function preload() {
     game.load.spritesheet('tileset', 'images/tileset.png', 64, 64);
     game.load.spritesheet('objects', 'images/objects.png', 64, 64);
+    game.load.spritesheet('people', 'images/people.png', 64, 64);
 }
 
 var handle1;
@@ -31,6 +56,23 @@ function create() {
     buildRoomB(roomBx, roomBy);
     drawTileRectangle(roomAx+1,roomAy+1,3,3,'tileset',215);
     drawTileRectangle(roomBx+1,roomBy+1,3,3,'tileset',215);
+    addCharacter(p1);
+}
+
+function addCharacter(character)
+{
+    player = game.add.sprite(character.x*tilesize, character.y*tilesize, 'people', character.img_id);
+    player.scale.setTo(ratio,ratio);
+
+    player.health = character.health;
+    player.maxHealth = 100;
+
+    playerHealthMeter = game.add.plugin(Phaser.Plugin.HealthMeter);
+    playerHealthMeter.bar(
+        player, {x: (character.x+0.1)*tilesize, y: character.y*tilesize-3, width: tilesize*0.80, height: 2, background: '#aa0000'}
+    );
+    character.health_bar = playerHealthMeter;
+    character.sprite = player;
 }
 
 function buildRoomA(x, y)
@@ -175,6 +217,7 @@ jQuery(function($){
     });
 
     $('#actionslist').on('click','li.actions',function() {
+        p1.move(10,10);
         $.ajax({
             type: "POST",
             url: "/selectaction",
